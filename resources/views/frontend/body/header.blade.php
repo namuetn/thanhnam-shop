@@ -18,7 +18,11 @@
                             <a href="#"><i class="icon fa fa-check"></i>Checkout</a>
                         </li>
                         <li>
-                            <a href="#"><i class="icon fa fa-lock"></i>Login</a>
+                            @auth()
+                                <a href="{{ route('login') }}"><i class="icon fa fa-lock"></i>User Profile</a>
+                            @else
+                                <a href="{{ route('login') }}"><i class="icon fa fa-lock"></i>Login/Register</a>
+                            @endauth
                         </li>
                     </ul>
                 </div>
@@ -60,7 +64,7 @@
                 <div class="col-xs-12 col-sm-12 col-md-3 logo-holder">
                     <!-- ============================================================= LOGO ============================================================= -->
                     <div class="logo">
-                        <a href="home.html"> <img src="{{ asset('frontend/assets/images/logo.png') }}" alt="logo" /> </a>
+                        <a href="{{ url('/') }}"> <img src="{{ asset('frontend/assets/images/logo.png') }}" alt="logo" /> </a>
                     </div>
                     <!-- /.logo -->
                     <!-- ============================================================= LOGO : END ============================================================= -->
