@@ -4,9 +4,11 @@ namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\FrontEnd\UserProfileUpdateRequest;
+use App\Http\Requests\FrontEnd\UserUpdatePasswordRequest;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 
 class IndexController extends Controller
@@ -62,6 +64,39 @@ class IndexController extends Controller
             DB::rollBack();
 
             return redirect()->back();
+        }
+    }
+
+    public function userChangePassword()
+    {
+        return view('frontend.profile.change_password');
+    }
+
+    public function userUpdatePassword(UserUpdatePasswordRequest $request)
+    {
+        DB::beginTransaction();
+
+        try {
+            if (Hash::check($request->current_password, auth()->user()->password)) {
+                auth()->user()->update([
+                    'password' => Hash::make($request->password),
+                ]);
+                
+                DB::commit();
+
+                return redirect()->route('dashboard')->with([
+                    'message' => 'User Updated Password Success',
+                    'alert-type' => 'success',
+                ]);
+            }
+        } catch (\Throwable $th) {
+            Log::error($th);
+            DB::rollBack();
+
+            return redirect()->back()->with([
+                'message' => 'Admin Updated Password Failure',
+                'alert-type' => 'error',
+            ]);
         }
     }
 }
