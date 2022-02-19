@@ -47,3 +47,5 @@ Route::get('/', [IndexController::class, 'index']);
 Route::get('/user/logout', [IndexController::class, 'userLogout'])->name('user.logout');
 Route::get('/user/profile', [IndexController::class, 'userProfile'])->name('user.profile');
 Route::put('/user/profile/update', [IndexController::class, 'userProfileUpdate'])->name('user.profile.update');
+Route::get('/user/change/password', [IndexController::class, 'userChangePassword'])->name('user.change.password');
+Route::put('/user/update/password', [IndexController::class, 'userUpdatePassword'])->name('user.update.password');

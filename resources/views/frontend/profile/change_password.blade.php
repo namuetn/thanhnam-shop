@@ -5,7 +5,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-2"><br>
-                    <img src="{{ !empty($user->profile_photo_path) ? url('upload/user_images/' . $user->profile_photo_path) : url('upload/no_image.jpg') }}" 
+                    <img src="{{ !empty(auth()->user()->profile_photo_path) ? url('upload/user_images/' . auth()->user()->profile_photo_path) : url('upload/no_image.jpg') }}" 
                         alt="" 
                         class="card-img-top" 
                         style="border-radius: 50%"
@@ -27,44 +27,34 @@
                 <div class="col-md-6">
                     <div class="card">
                         <h3 class="text-center">
-                            <span class="text-danger">Hi...</span>
-                            <strong>{{ auth()->user()->name }}</strong>
-                            Update Your Profile
+                            <span class="text-danger">Change Password</span>
                         </h3>
 
                         <div class="card-body">
-                            <form action="{{ route('user.profile.update') }}" method="POST" enctype="multipart/form-data">
+                            <form action="{{ route('user.update.password') }}" method="POST">
                                 @csrf
                                 @method('PUT')
 
                                 <div class="form-group">
-                                    <label class="info-title" for="name">Name<span></span></label>
-                                    <input type="text" class="form-control" name="name" value="{{ old('name', $user->name) }}" />
-                                    @error('name')
+                                    <label class="info-title" for="current_password">Current Password<span></span></label>
+                                    <input type="password" class="form-control" name="current_password" />
+                                    @error('current_password')
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror
                                 </div>
 
                                 <div class="form-group">
-                                    <label class="info-title" for="email">Email Address<span></span></label>
-                                    <input type="email" class="form-control" name="email" value="{{ old('email', $user->email) }}" />
-                                    @error('email')
+                                    <label class="info-title" for="password">New Password<span></span></label>
+                                    <input type="password" class="form-control" name="password" />
+                                    @error('password')
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror
                                 </div>
 
                                 <div class="form-group">
-                                    <label class="info-title" for="phone">Phone<span></span></label>
-                                    <input type="text" class="form-control" name="phone" value="{{ old('phone', $user->phone) }}" />
-                                    @error('phone')
-                                        <span class="text-danger">{{ $message }}</span>
-                                    @enderror
-                                </div>
-
-                                <div class="form-group">
-                                    <label class="info-title" for="profile_photo_path">User Image<span></span></label>
-                                    <input type="file" class="form-control" name="profile_photo_path" />
-                                    @error('profile_photo_path')
+                                    <label class="info-title" for="password_confirmation">Confirm Password<span></span></label>
+                                    <input type="password" class="form-control" name="password_confirmation" />
+                                    @error('password_confirmation')
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror
                                 </div>
