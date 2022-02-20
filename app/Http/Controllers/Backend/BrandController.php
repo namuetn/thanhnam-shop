@@ -29,11 +29,11 @@ class BrandController extends Controller
             $saveUrl = 'upload/brand/' . $nameGenerate;
             Image::make($image)->resize(300, 300)->save($saveUrl);
 
-            Brand::insert([
+            Brand::create([
                 'name_en' => $request->name_en,
                 'name_vi' => $request->name_vi,
-                'slug_en' => strtolower(str_replace(' ', '-', $request->slug_en)),
-                'slug_vi' => strtolower(str_replace(' ', '-', $request->slug_vi)),
+                'slug_en' => strtolower(str_replace(' ', '-', $request->name_en)),
+                'slug_vi' => strtolower(str_replace(' ', '-', $request->name_vi)),
                 'image' => $saveUrl,
             ]);
 
@@ -80,8 +80,8 @@ class BrandController extends Controller
             Brand::findOrFail($id)->update([
                 'name_en' => $request->name_en,
                 'name_vi' => $request->name_vi,
-                'slug_en' => strtolower(str_replace(' ', '-', $request->slug_en)),
-                'slug_vi' => strtolower(str_replace(' ', '-', $request->slug_vi)),
+                'slug_en' => strtolower(str_replace(' ', '-', $request->name_en)),
+                'slug_vi' => strtolower(str_replace(' ', '-', $request->name_vi)),
                 'image' => $image ? $saveUrl : $oldImage,
             ]);
 
@@ -129,6 +129,5 @@ class BrandController extends Controller
                 'alert-type' => 'error',
             ]);
         }
-        
     }
 }
