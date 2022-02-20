@@ -29,8 +29,8 @@
                                                 <td>{{ $brand->name_vi }}</td>
                                                 <td><img src="{{ asset($brand->image) }}" alt="" style="width: 70px"; height="40px;"></td>
                                                 <td>
-                                                    <a href="" class="btn btn-info">Edit</a>
-                                                    <a href="" class="btn btn-danger">Delete</a>
+                                                    <a href="{{ route('brand.edit', $brand->id) }}" class="btn btn-info">Edit</a>
+                                                    <a href="{{ route('brand.delete', $brand->id) }}" id="delete" class="btn btn-danger">Delete</a>
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -86,7 +86,7 @@
                                         @enderror
                                     </div>
                                     <div class="text-xs-right">
-                                        <input type="submit" class="btn btn-rounded btn-info" value="Update">
+                                        <input type="submit" class="btn btn-rounded btn-info" value="Submit">
                                     </div>
                                 </form>
                             </div>
