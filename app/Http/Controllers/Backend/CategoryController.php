@@ -22,7 +22,6 @@ class CategoryController extends Controller
     {
         DB::beginTransaction();
         try {
-            // dd(1);
             Category::create([
                 'category_name_en' => $request->category_name_en,
                 'category_name_vi' => $request->category_name_vi,
@@ -66,7 +65,7 @@ class CategoryController extends Controller
                 'category_name_en' => $request->category_name_en,
                 'category_name_vi' => $request->category_name_vi,
                 'category_slug_en' => strtolower(str_replace(' ', '-', $request->category_name_en)),
-                'category_slug_vi' => strtolower(str_replace(' ', '-', $request->category_name_vi)),
+                'category_slug_vi' => mb_strtolower(str_replace(' ', '-', $request->category_name_vi)),
                 'category_image' => $request->category_icon,
             ]);
 

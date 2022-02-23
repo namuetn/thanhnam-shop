@@ -4,6 +4,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Backend\AdminProfileController;
 use App\Http\Controllers\Backend\BrandController;
 use App\Http\Controllers\Backend\CategoryController;
+use App\Http\Controllers\Backend\SubCategoryController;
 use App\Http\Controllers\Frontend\IndexController;
 use Illuminate\Support\Facades\Route;
 
@@ -68,4 +69,20 @@ Route::prefix('categories')->group(function () {
     Route::get('/edit/{id}', [CategoryController::class, 'edit'])->name('category.edit');
     Route::put('/update/{id}', [CategoryController::class, 'update'])->name('category.update');
     Route::get('/delete/{id}', [CategoryController::class, 'destroy'])->name('category.delete');
+
+    // SubCategory All Route 
+    Route::prefix('sub')->group(function () {
+        Route::get('/', [SubCategoryController::class, 'index'])->name('all.subcategory');
+        Route::post('/store', [SubCategoryController::class, 'store'])->name('subcategory.store');
+        Route::get('/edit/{id}', [SubCategoryController::class, 'edit'])->name('subcategory.edit');
+        Route::put('/update/{id}', [SubCategoryController::class, 'update'])->name('subcategory.update');
+        Route::get('/delete/{id}', [SubCategoryController::class, 'destroy'])->name('subcategory.delete');
+        Route::get('/ajax/{categoryId}', [SubCategoryController::class, 'getSubCategoryJson'])->name('subsubcategory.delete');
+
+        Route::get('/sub', [SubCategoryController::class, 'subIndex'])->name('all.subsubcategory');
+        Route::post('/sub/store', [SubCategoryController::class, 'subStore'])->name('subsubcategory.store');
+        Route::get('/sub/edit/{id}', [SubCategoryController::class, 'subEdit'])->name('subsubcategory.edit');
+        Route::put('/sub/update/{id}', [SubCategoryController::class, 'subUpdate'])->name('subsubcategory.update');
+        Route::get('/sub/delete/{id}', [SubCategoryController::class, 'subDestroy'])->name('subsubcategory.delete');
+    });
 });
