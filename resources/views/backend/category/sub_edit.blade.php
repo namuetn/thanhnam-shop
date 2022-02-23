@@ -5,46 +5,49 @@
         <!-- Main content -->
         <section class="content">
             <div class="row">
-                {{-- ---- Add Brand Page ---- --}}
+                {{-- ---- Add Sub Category Page ---- --}}
                 <div class="col-12">
                     <div class="box">
                         <div class="box-header with-border">
-                            <h3 class="box-title">Edit Brand</h3>
+                            <h3 class="box-title">Edit Sub Category</h3>
                         </div>
                         <!-- /.box-header -->
                         <div class="box-body">
                             <div class="table-responsive">
-                                <form method="POST" action="{{ route('brand.update', $brand->id) }}" enctype="multipart/form-data">
+                                <form method="POST" action="{{ route('subsubcategory.update', $subcategory->id) }}">
                                     @csrf
                                     @method('PUT')
-
-                                    <input type="hidden" name="old_image" value="{{ $brand->image }}">
                                     <div class="form-group">
-                                        <h5>Brand Name English<span class="text-danger">*</span></h5>
+                                        <h5>Category Select <span class="text-danger">*</span></h5>
                                         <div class="controls">
-                                            <input type="text" name="name_en" class="form-control" value="{{ old('name_en', $brand->name_en) }}" />
+                                            <select name="category_id" class="form-control">
+                                                <option value="" selected disabled>Select Category</option>
+                                                @foreach ($categories as $category)
+                                                    <option value="{{ $category->id }}" {{ $category->id == $subcategory->category_id ? 'selected' : '' }}>{{ $category->category_name_en }}</option>  
+                                                @endforeach
+                                            </select>
+                                            @error('category_id')
+                                                <span class="text-danger">{{ $message }}</span>
+                                            @enderror
                                         </div>
-                                        @error('name_en')
+                                    </div>
+
+                                    <div class="form-group">
+                                        <h5>Sub Category Name English<span class="text-danger">*</span></h5>
+                                        <div class="controls">
+                                            <input type="text" name="subcategory_name_en" class="form-control" value="{{ old('subcategory_name_en', $subcategory->subcategory_name_en) }}" />
+                                        </div>
+                                        @error('subcategory_name_en')
                                             <span class="text-danger">{{ $message }}</span>
                                         @enderror
                                     </div>
 
                                     <div class="form-group">
-                                        <h5>Brand Name Vietnamese<span class="text-danger">*</span></h5>
+                                        <h5>Sub Category Name Vietnamese<span class="text-danger">*</span></h5>
                                         <div class="controls">
-                                            <input type="text" name="name_vi" class="form-control" value="{{ old('name_vi', $brand->name_vi) }}" />
+                                            <input type="text" name="subcategory_name_vi" class="form-control" value="{{ old('subcategory_name_vi', $subcategory->subcategory_name_vi) }}"/>
                                         </div>
-                                        @error('name_vi')
-                                            <span class="text-danger">{{ $message }}</span>
-                                        @enderror
-                                    </div>
-
-                                    <div class="form-group">
-                                        <h5>Brand Image</h5>
-                                        <div class="controls">
-                                            <input type="file" name="image" class="form-control" value="{{ old('image', $brand->image) }}" />
-                                        </div>
-                                        @error('image')
+                                        @error('subcategory_name_vi')
                                             <span class="text-danger">{{ $message }}</span>
                                         @enderror
                                     </div>
