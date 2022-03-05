@@ -225,4 +225,11 @@ class SubCategoryController extends Controller
             ]);
         }
     }
+
+    public function getSubSubCategoryJson($subcategoryId)
+    {
+        $subsubCategories = SubSubCategory::where('subcategory_id', $subcategoryId)->orderBy('subsubcategory_name_en')->get();
+
+        return response()->json($subsubCategories);
+    }
 }
