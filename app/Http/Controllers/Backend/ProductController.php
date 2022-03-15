@@ -41,7 +41,7 @@ class ProductController extends Controller
                 'product_name_en' => $request->product_name_en,
                 'product_name_vi' => $request->product_name_vi,
                 'product_slug_en' => mb_strtolower(str_replace(' ', '-', $request->product_name_en)),
-                'product_slug_vi' => mb_strtolower(str_replace(' ', '-', $request->product_slug_vi)),
+                'product_slug_vi' => mb_strtolower(str_replace(' ', '-', $request->product_name_vi)),
                 'product_code' => $request->product_code,
                 'product_quanlity' => $request->product_quanlity,
                 'product_tags_en' => $request->product_tags_en,
@@ -81,7 +81,7 @@ class ProductController extends Controller
 
             DB::commit();
 
-            return redirect()->back()->with([
+            return redirect()->route('product.index')->with([
                 'message' => 'Product Insert Successfully',
                 'alert-type' => 'success',
             ]); 
@@ -94,5 +94,12 @@ class ProductController extends Controller
                 'alert-type' => 'error',
             ]);
         }
+    }
+
+    public function index()
+    {
+        $products = Product::latest()->get();
+
+        return view('backend.product.index', compact('products'));
     }
 }
