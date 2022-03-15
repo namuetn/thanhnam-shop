@@ -73,8 +73,8 @@
                     <li class="{{ $route == 'product.create' ? 'active' : '' }}">
                         <a href="{{ route('product.create') }}"><i class="ti-more"></i>Add Product</a>
                     </li>
-                    <li>
-                        <a href="invoice.html"><i class="ti-more"></i>Manage Products</a>
+                    <li class="{{ $route == 'product.index' ? 'active' : '' }}">
+                        <a href="{{ route('product.index') }}"><i class="ti-more"></i>Manage Products</a>
                     </li>
                 </ul>
             </li>
