@@ -262,6 +262,60 @@ class ProductController extends Controller
                 'alert-type' => 'error',
             ]);
         }
+    }
 
+    public function active($id)
+    {
+        Product::findOrFail($id)->update(['status' => 1]);
+
+        return redirect()->back()->with([
+            'message' => 'Product Inactive Successfully',
+            'alert-type' => 'success',
+        ]);
+    }
+
+    public function inactive($id)
+    {
+        Product::findOrFail($id)->update(['status' => 0]);
+
+        return redirect()->back()->with([
+            'message' => 'Product Active Successfully',
+            'alert-type' => 'success',
+        ]);
+    }
+
+    public function destroy($id)
+    {
+        DB::beginTransaction();
+
+        try {
+            $product = Product::findOrFail($id);
+            $pathThumnail = public_path($product->product_thumnail);
+            file_exists($pathThumnail) ? unlink($product->product_thumnail) : '';
+            $product->delete();
+
+            $images = ImageProduct::where('product_id', $id);
+            foreach ($images->get() as $image) {
+                $pathMulti = public_path($image->photo_name);
+                file_exists($pathMulti) ? unlink($image->photo_name) : '';
+            }
+
+            $images->delete();
+
+            DB::commit();
+
+            return redirect()->back()->with([
+                'message' => 'Product Deleted Successfully',
+                'alert-type' => 'success',
+            ]);
+        } catch (\Throwable $th) {
+            Log::error($th);
+            DB::rollBack();
+
+            return redirect()->back()->with([
+                'message' => 'Product Deleted Failure',
+                'alert-type' => 'error',
+            ]);
+        }
     }
 }
