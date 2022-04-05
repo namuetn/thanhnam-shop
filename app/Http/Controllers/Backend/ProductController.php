@@ -12,6 +12,7 @@ use App\Models\Product;
 use App\Models\SubCategory;
 use App\Models\SubSubCategory;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Intervention\Image\Facades\Image;
@@ -108,13 +109,14 @@ class ProductController extends Controller
 
     public function edit($id)
     {
+        $multiImage = ImageProduct::where('product_id', $id)->get();
         $brands = Brand::latest()->get();
         $categories = Category::latest()->get();
         $subCategories = SubCategory::latest()->get();
         $subsubCategories = SubSubCategory::latest()->get();
         $product = Product::findOrFail($id);
 
-        return view('backend.product.edit', compact('categories', 'brands', 'subCategories', 'subsubCategories', 'product'));
+        return view('backend.product.edit', compact('categories', 'brands', 'subCategories', 'subsubCategories', 'product', 'multiImage'));
     }
 
     public function update(UpdateProductRequest $request, $id)
@@ -168,5 +170,98 @@ class ProductController extends Controller
                 'alert-type' => 'error',
             ]);
         }
+    }
+
+    public function updateMultiImage(Request $request)
+    {
+        DB::beginTransaction();
+
+        try {
+            $images = $request->multi_image;
+
+            foreach ($images as $id => $image) {
+                $oldImage = ImageProduct::findOrFail($id)->photo_name;
+                !is_null($oldImage) ? unlink($oldImage) : '';
+                $nameGenerate = hexdec(uniqid()) . '.' . $image->getClientOriginalExtension();
+                $saveUrl = 'upload/products/multi-image/' . $nameGenerate;
+                Image::make($image)->resize(917, 1000)->save($saveUrl);
+
+                ImageProduct::findOrFail($id)->update([
+                    'photo_name' => $saveUrl,
+                ]);
+            }
+
+            DB::commit();
+
+            return redirect()->back()->with([
+                'message' => 'Product Image Updated Successfully',
+                'alert-type' => 'success',
+            ]);
+        } catch (\Throwable $th) {
+            Log::error($th);
+            DB::rollBack();
+
+            return redirect()->back()->with([
+                'message' => 'Product Image Updated Failure',
+                'alert-type' => 'error',
+            ]);
+        }
+    }
+
+    public function updateThumnailImage(Request $request, $id)
+    {
+        DB::beginTransaction();
+
+        try {
+            unlink($request->old_image);
+            $image = $request->file('product_thumnail');
+            $nameGenerate = hexdec(uniqid()) . '.' . $image->getClientOriginalExtension();
+            $saveUrl = 'upload/products/thumbnail/' . $nameGenerate;
+            Image::make($image)->resize(917, 1000)->save($saveUrl);
+
+            Product::findOrFail($id)->update(['product_thumnail' => $saveUrl]);
+
+            DB::commit();
+
+            return redirect()->back()->with([
+                'message' => 'Product Image Thumnail Updated Successfully',
+                'alert-type' => 'success',
+            ]);
+        } catch (\Throwable $th) {
+            Log::error($th);
+            DB::rollBack();
+
+            return redirect()->back()->with([
+                'message' => 'Product Image Thumnail Updated Failure',
+                'alert-type' => 'error',
+            ]);
+        }
+    }
+
+    public function destroyMultiImage($id)
+    {
+        DB::beginTransaction();
+
+        try {
+            $image = ImageProduct::findOrFail($id);
+            unlink($image->photo_name);
+            $image->delete();
+
+            DB::commit();
+
+            return redirect()->back()->with([
+                'message' => 'Product Multi Image Deleted Successfully',
+                'alert-type' => 'success',
+            ]);
+        } catch (\Throwable $th) {
+            Log::error($th);
+            DB::rollBack();
+
+            return redirect()->back()->with([
+                'message' => 'Product Multi Image Deleted Failure',
+                'alert-type' => 'error',
+            ]);
+        }
+
     }
 }

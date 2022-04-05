@@ -9,5 +9,8 @@ class ImageProduct extends Model
 {
     use HasFactory;
 
-    protected $guard = [];
+    protected $fillable = [
+        'photo_name',
+        'product_id',
+    ];
 }
