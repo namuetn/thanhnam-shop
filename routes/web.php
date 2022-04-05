@@ -97,5 +97,8 @@ Route::prefix('products')->group(function () {
     Route::post('/store', [ProductController::class, 'store'])->name('product.store');
     Route::get('/edit/{id}', [ProductController::class, 'edit'])->name('product.edit');
     Route::put('/update/{id}', [ProductController::class, 'update'])->name('product.update');
+    Route::post('/update/multi-image', [ProductController::class, 'updateMultiImage'])->name('product.update.multi-image');
+    Route::post('/update/thumnail-image/{id}', [ProductController::class, 'updateThumnailImage'])->name('product.update.thumnail-image');
     Route::get('/delete/{id}', [ProductController::class, 'destroy'])->name('product.delete');
+    Route::get('/delete/multi-image/{id}', [ProductController::class, 'destroyMultiImage'])->name('product.delete.multi-image');
 });
