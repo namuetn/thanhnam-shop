@@ -41,7 +41,7 @@
                                                         <select name="category_id" class="form-control">
                                                             <option value="" selected disabled>Select Category</option>
                                                             @foreach ($categories as $category)
-                                                                <option value="{{ $category->id }}">{{ $category->category_name_en }}</option>  
+                                                                <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? "selected":"" }}>{{ $category->category_name_en }}</option>  
                                                             @endforeach
                                                         </select>
                                                         @error('category_id')
@@ -361,7 +361,7 @@
                         success: function (data) {
                             $('select[name="subsubcategory_id"]').html('');
                             $('select[name="subsubcategory_id"]').append(
-                                '<option value="" selected disabled>Select Sub Category</option>'
+                                '<option value="" selected disabled>Select Sub Sub Category</option>'
                             );
                             $('select[name="subcategory_id"]').empty();
                             if (data.length != 0) {
