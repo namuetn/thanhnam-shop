@@ -8,6 +8,7 @@ use App\Http\Controllers\Backend\ProductController;
 use App\Http\Controllers\Backend\SliderController;
 use App\Http\Controllers\Backend\SubCategoryController;
 use App\Http\Controllers\Frontend\IndexController;
+use App\Http\Controllers\Frontend\LanguageController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -43,18 +44,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['admin:admin']], function ()
     Route::get('/admin/change/password', [AdminProfileController::class, 'adminChangePassword'])->name('admin.change.password');
     Route::post('/admin/update/password', [AdminProfileController::class, 'adminUpdatePassword'])->name('admin.update.password');
 // });
-// User All Route
 
-Route::middleware(['auth:sanctum,web', 'verified'])->get('/dashboard', function () {
-    return view('dashboard');
-})->name('dashboard');
-
-Route::get('/', [IndexController::class, 'index']);
-Route::get('/user/logout', [IndexController::class, 'userLogout'])->name('user.logout');
-Route::get('/user/profile', [IndexController::class, 'userProfile'])->name('user.profile');
-Route::put('/user/profile/update', [IndexController::class, 'userProfileUpdate'])->name('user.profile.update');
-Route::get('/user/change/password', [IndexController::class, 'userChangePassword'])->name('user.change.password');
-Route::put('/user/update/password', [IndexController::class, 'userUpdatePassword'])->name('user.update.password');
 
 // Admin Brand All route
 Route::prefix('brands')->group(function () {
@@ -116,4 +106,21 @@ Route::prefix('sliders')->group(function () {
     Route::get('/delete/{id}', [SliderController::class, 'destroy'])->name('slider.delete');
     Route::get('/active/{id}', [SliderController::class, 'active'])->name('slider.active');
     Route::get('/inactive/{id}', [SliderController::class, 'inactive'])->name('slider.inactive');
+});
+
+//--------------------Front-end----------------------
+Route::group(['middleware' => 'locale'], function() {
+    Route::get('change-language/{language}', [LanguageController::class, 'changeLanguage'])->name('user.change-language');
+
+    // User All Route
+    Route::middleware(['auth:sanctum,web', 'verified'])->get('/dashboard', function () {
+        return view('dashboard');
+    })->name('dashboard');
+
+    Route::get('/', [IndexController::class, 'index']);
+    Route::get('/user/logout', [IndexController::class, 'userLogout'])->name('user.logout');
+    Route::get('/user/profile', [IndexController::class, 'userProfile'])->name('user.profile');
+    Route::put('/user/profile/update', [IndexController::class, 'userProfileUpdate'])->name('user.profile.update');
+    Route::get('/user/change/password', [IndexController::class, 'userChangePassword'])->name('user.change.password');
+    Route::put('/user/update/password', [IndexController::class, 'userUpdatePassword'])->name('user.update.password');
 });
