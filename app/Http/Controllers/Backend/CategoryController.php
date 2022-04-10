@@ -66,7 +66,7 @@ class CategoryController extends Controller
                 'category_name_vi' => $request->category_name_vi,
                 'category_slug_en' => strtolower(str_replace(' ', '-', $request->category_name_en)),
                 'category_slug_vi' => mb_strtolower(str_replace(' ', '-', $request->category_name_vi)),
-                'category_image' => $request->category_icon,
+                'category_icon' => $request->category_icon,
             ]);
 
             $notification = [
